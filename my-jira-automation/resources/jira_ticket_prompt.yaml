@@ -5,7 +5,7 @@ jira:
         I don't care if it's true I don't need it, just to log my time to my manager approval...
         please help me create a 5 jira summary and short description that I can use related to data engineering field.
         you can add keyword like those: [cloud aws, snowflake, databricks, data vault, hashicorp vault, bitbucket, python, dbt]
-        this is the format ouptut that I need :
+        I just want a json as output, no other text from you, this is the json format ouptut that I need :
         [
           {
             \"title\":  \"my_title\",
@@ -37,7 +37,7 @@ jira:
         I don't care if it's true I don't need it, just to log my time to my manager approval...
         please help me create a 5 jira summary and short description that I can use related to data engineering field.
         you can add keyword like those: [cloud aws, snowflake, databricks, data vault, hashicorp vault, bitbucket, python, dbt]
-        this is the format ouptut that I need :
+        I just want a json as output, no other text from you, this is the json format ouptut that I need :
         [
           {
             \"title\":  \"my title\",

@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-type MyJiraAutomation struct {
+type JiraAutomationConfigYaml struct {
 	APIVersion string `yaml:"apiVersion"`
 	Jira       struct {
 		Prompt []struct {
@@ -16,7 +16,7 @@ type MyJiraAutomation struct {
 	} `yaml:"jira"`
 }
 
-func (c *MyJiraAutomation) GetMyJiraPromptConf() *MyJiraAutomation {
+func (c *JiraAutomationConfigYaml) GetMyJiraPromptConf() *JiraAutomationConfigYaml {
 	yamlFile, err := os.ReadFile("resources/jira_ticket_prompt.yaml")
 	if err != nil {
 		log.Printf("yamlFile.Get err   #%v ", err)
