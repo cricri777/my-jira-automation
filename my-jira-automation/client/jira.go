@@ -1,4 +1,4 @@
-package client
+package openai
 
 import (
 	"bytes"
@@ -27,16 +27,28 @@ func NewJiraClient(baseURL, username, apiToken, projectID string) *JiraClient {
 	}
 }
 
-func (c *JiraClient) CreateTicket(accountID string) {
+func (c *JiraClient) CreateTicket(summary string, description string) string {
 	postUrl := fmt.Sprintf("%s/rest/api/2/issue/%s", c.BaseURL)
 
-	body := []byte(`{
-		"title": "Post title",
-		"body": "Post description",
-		"userId": 1
-	}`)
+	body := fmt.Sprintf(`{
+	  "fields": {
+		"issuetype": {
+		  "name": "Story"
+		},
+		"parent": {
+		  "key": "BDEP-2"
+		},
+		"project": {
+		  "key": "BDEP"
+		},
+		"summary": "%s"
+		"description": "%s",
+	  }
+	}`, summary, description)
 
-	request, err := http.NewRequest("POST", postUrl, bytes.NewBuffer(body))
+	bodyByte := []byte(body)
+	request, err := http.NewRequest("POST", postUrl, bytes.NewBuffer(bodyByte))
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,21 +63,17 @@ func (c *JiraClient) CreateTicket(accountID string) {
 
 	defer res.Body.Close()
 
-	post := &Post{}
-	derr := json.NewDecoder(res.Body).Decode(post)
-	if derr != nil {
-		log.Fatal(derr)
+	readBodyResponse, err := io.ReadAll(res.Body)
+	if err != nil {
+		log.Println("Error reading response body:", err)
 	}
 
-	if res.StatusCode != http.StatusCreated {
-		log.Fatal(res.Status)
+	if res.StatusCode == http.StatusCreated || res.StatusCode == http.StatusOK {
+		log.Println("Ticket created successfully!")
+	} else {
+		log.Printf("Failed to create ticket. Status: %s\n", res.Status)
 	}
-
-	fmt.Println("Id:", post.Id)
-	fmt.Println("Title:", post.Title)
-	fmt.Println("Body:", post.Body)
-	fmt.Println("UserId:", post.UserId)
-
+	return string(readBodyResponse)
 }
 
 // GetTicket get a ticket from Jira

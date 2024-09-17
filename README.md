@@ -8,3 +8,8 @@ Automate my jira issue creation
 1) Log my ticket to JIRA
 2) Log my time to Tempo
 3) Enjoy 15 minutes of my time saved every working week 😂
+
+## TODO
+- use LLM to Generate prompt to log jira ticket with summary and description
+- use Tempo api to log time on ticket created
+- create jira ticket
