@@ -1,4 +1,4 @@
-package openai
+package jira
 
 import (
 	"bytes"
@@ -11,24 +11,24 @@ import (
 
 // JiraClient represents the Jira API client
 type JiraClient struct {
-	BaseURL   string
-	Username  string
-	APIToken  string
-	ProjectID string
+	baseUrl   string
+	userName  string
+	apiToken  string
+	projectID string
 }
 
 // NewJiraClient is the constructor function for JiraClient
-func NewJiraClient(baseURL, username, apiToken, projectID string) *JiraClient {
+func NewJiraClient(baseURL, userName, apiToken, projectID string) *JiraClient {
 	return &JiraClient{
-		BaseURL:   baseURL,
-		Username:  username,
-		APIToken:  apiToken,
-		ProjectID: projectID,
+		baseUrl:   baseURL,
+		userName:  userName,
+		apiToken:  apiToken,
+		projectID: projectID,
 	}
 }
 
 func (c *JiraClient) CreateTicket(summary string, description string) string {
-	postUrl := fmt.Sprintf("%s/rest/api/2/issue/%s", c.BaseURL)
+	postUrl := fmt.Sprintf("%s/rest/api/2/issue/%s", c.baseUrl)
 
 	body := fmt.Sprintf(`{
 	  "fields": {
@@ -78,7 +78,7 @@ func (c *JiraClient) CreateTicket(summary string, description string) string {
 
 // GetTicket get a ticket from Jira
 func (c *JiraClient) GetTicket(ticketKey string) (map[string]interface{}, error) {
-	url := fmt.Sprintf("%s/rest/api/2/issue/%s", c.BaseURL, ticketKey)
+	url := fmt.Sprintf("%s/rest/api/2/issue/%s", c.baseUrl, ticketKey)
 
 	// Create a new HTTP request
 	req, err := http.NewRequest("GET", url, nil)
@@ -87,7 +87,7 @@ func (c *JiraClient) GetTicket(ticketKey string) (map[string]interface{}, error)
 	}
 
 	// Set the authentication header
-	req.SetBasicAuth(c.Username, c.APIToken)
+	req.SetBasicAuth(c.userName, c.apiToken)
 	req.Header.Set("Content-Type", "application/json")
 
 	// Execute the request

@@ -16,7 +16,7 @@ type MyJiraAutomation struct {
 	} `yaml:"jira"`
 }
 
-func (c *MyJiraAutomation) getMyJiraPromptConf() *MyJiraAutomation {
+func (c *MyJiraAutomation) GetMyJiraPromptConf() *MyJiraAutomation {
 	yamlFile, err := os.ReadFile("resources/jira_ticket_prompt.yaml")
 	if err != nil {
 		log.Printf("yamlFile.Get err   #%v ", err)
