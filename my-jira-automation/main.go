@@ -29,9 +29,7 @@ func main() {
 
 	}
 
-	// Create an instance of JiraAutomationConfigYaml Configuration
 	myJira := &helper.JiraAutomationConfigYaml{}
-
 	jiraConf := myJira.GetMyJiraPromptConf()
 
 	// Print the data loaded from the YAML file
@@ -51,14 +49,15 @@ func main() {
 	// for testing purposes
 	//chatGPTResult := "[{\"title\":\"my_title1\",\"description\":\"my description1\",\"day\":1},{\"title\":\"my_title2\",\"description\":\"my description2\",\"day\":2},{\"title\":\"my_title3\",\"description\":\"my description3\",\"day\":3},{\"title\":\"my_title4\",\"description\":\"my description4\",\"day\":4},{\"title\":\"my_title5\",\"description\":\"my description5\",\"day\":5}]"
 	log.Printf("chatgptprompt: [%s]", chatGPTResult)
-	// TODO create ticket for each prompt
 	llmOutputResult := &helper.LLMOutputResult{}
 	parsedChatGPTResult := llmOutputResult.BuildLLMOutputResult(chatGPTResult)
 
-	// TODO: fix this compile issue
-	log.Printf("first title%s", parsedChatGPTResult[0].Title)
-	log.Printf("second title%s", parsedChatGPTResult[0].Title)
-	log.Printf("first title %s")
+	log.Printf("1st title%s", parsedChatGPTResult.JiraTicketsInfo[0].Title)
+	log.Printf("2nd title%s", parsedChatGPTResult.JiraTicketsInfo[2].Title)
+	log.Printf("3rd title%s", parsedChatGPTResult.JiraTicketsInfo[3].Title)
+	log.Printf("4th title%s", parsedChatGPTResult.JiraTicketsInfo[4].Title)
+
+	// TODO: create ticket
 	jiraClient := jira.NewJiraClient(baseURL, username, apiToken, projectID)
 
 	ticket, err := jiraClient.GetTicket("BDEP-15")

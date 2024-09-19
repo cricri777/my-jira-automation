@@ -5,14 +5,16 @@ import (
 	"log"
 )
 
-type LLMOutputResult []struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Day         int    `json:"day"`
+type LLMOutputResult struct {
+	JiraTicketsInfo []struct {
+		Title       string `json:"title"`
+		Description string `json:"description"`
+		Day         int    `json:"day"`
+	} `json:"jira_tickets_info"`
 }
 
 func (llm *LLMOutputResult) BuildLLMOutputResult(jsonLLMResponse string) *LLMOutputResult {
-	err := json.Unmarshal([]byte(jsonLLMResponse), llm)
+	err := json.Unmarshal([]byte(jsonLLMResponse), &llm)
 	if err != nil {
 		log.Fatal(err)
 	}

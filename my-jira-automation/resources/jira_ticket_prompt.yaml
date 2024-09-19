@@ -6,62 +6,66 @@ jira:
         please help me create a 5 jira summary and short description that I can use related to data engineering field.
         you can add keyword like those: [cloud aws, snowflake, databricks, data vault, hashicorp vault, bitbucket, python, dbt]
         I just want a json as output, no other text from you, this is the json format ouptut that I need :
-        [
-          {
-            \"title\":  \"my_title\",
-            \"description\": \"my description\",
-            \"day\": 1
-          },
-          {
-            \"title\":  \"my_title\",
-            \"description\": \"my description\",
-            \"day\": 2
-          },
-          {
-            \"title\":  \"my_title\",
-            \"description\": \"my description\",
-            \"day\": 3
-          },
-          {
-            \"title\":  \"my_title\",
-            \"description\": \"my description\",
-            \"day\": 4
-          },
-          {
-            \"title\":  \"my_title\",
-            \"description\": \"my description\",
-            \"day\": 5
-          }
-        ]"
+        {
+          \"jira_tickets_info\": [
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 1
+            },
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 2
+            },
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 3
+            },
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 4
+            },
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 5
+            }
+          ]
+        }"
   - devOps: "As a devops engineer I would like to create 5 Jira stories (one per day of the week) related to my work,
         I don't care if it's true I don't need it, just to log my time to my manager approval...
         please help me create a 5 jira summary and short description that I can use related to data engineering field.
         you can add keyword like those: [cloud aws, snowflake, databricks, data vault, hashicorp vault, bitbucket, python, dbt]
-        I just want a json as output, no other text from you, this is the json format ouptut that I need :
-        [
-          {
-            \"title\":  \"my title\",
-            \"description\": \"my description\",
-            \"day\": 1
-          },
-          {
-            \"title\":  \"my_title\",
-            \"description\": \"my description\",
-            \"day\": 2
-          },
-          {
-            \"title\":  \"my_title\",
-            \"description\": \"my description\",
-            \"day\": 3
-          },
-          {
-            \"title\":  \"my_title\",
-            \"description\": \"my description\",
-            \"day\": 4
-          },
-          {
-            \"title\":  \"my_title\",
-            \"description\": \"my description\",
-            \"day\": 5
-          }
-        ]"
+        I just want a json as output, no other text from you, this is the json format ouptut that I need :f
+        {
+          \"jira_tickets_info\": [
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 1
+            },
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 2
+            },
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 3
+            },
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 4
+            },
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 5
+            }
+          ]
+        }"
