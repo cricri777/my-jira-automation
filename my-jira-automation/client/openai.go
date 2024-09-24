@@ -5,9 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
-	"os"
 )
 
 const openaiURL = "https://api.openai.com/v1/chat/completions"
@@ -90,26 +88,4 @@ func RequestChatGPT(apiKey string, prompt string) (string, error) {
 	}
 
 	return "", fmt.Errorf("no response from OpenAI")
-}
-
-func main() {
-	// Get the OpenAI API key from environment variables
-	apiKey := os.Getenv("OPENAI_API_KEY")
-	if apiKey == "" {
-		log.Println("Please set the OPENAI_API_KEY environment variable.")
-		return
-	}
-
-	// Define the prompt
-	prompt := "Hello, ChatGPT! How are you today?"
-
-	// Request ChatGPT
-	response, err := RequestChatGPT(apiKey, prompt)
-	if err != nil {
-		fmt.Printf("Error: %v\n", err)
-		return
-	}
-
-	// Print the response
-	fmt.Println("ChatGPT Response:", response)
 }

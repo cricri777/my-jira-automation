@@ -4,6 +4,8 @@ import (
 	jira "ca.cricri/m/v2/my-jira-automation/client"
 	openai "ca.cricri/m/v2/my-jira-automation/client"
 	"ca.cricri/m/v2/my-jira-automation/helper"
+	"encoding/json"
+	"fmt"
 	"log"
 	"math/rand"
 	"os"
@@ -37,43 +39,45 @@ func main() {
 	devOpsPrompt := jiraConf.Jira.Prompt[1].DevOps
 	dataEngineerPrompt := jiraConf.Jira.Prompt[0].DataEngineer
 
-	log.Printf("devops prompt [%s]", devOpsPrompt)
-	log.Printf("dataengineer prompt [%s]", dataEngineerPrompt)
-
 	// prompt chatgpt
 	chatGPTResult, err := openai.RequestChatGPT(
 		openAIAPIKey,
 		chooseRandomBetween([]string{devOpsPrompt, dataEngineerPrompt}),
 	)
 
-	// for testing purposes
-	//chatGPTResult := "[{\"title\":\"my_title1\",\"description\":\"my description1\",\"day\":1},{\"title\":\"my_title2\",\"description\":\"my description2\",\"day\":2},{\"title\":\"my_title3\",\"description\":\"my description3\",\"day\":3},{\"title\":\"my_title4\",\"description\":\"my description4\",\"day\":4},{\"title\":\"my_title5\",\"description\":\"my description5\",\"day\":5}]"
-	log.Printf("chatgptprompt: [%s]", chatGPTResult)
 	llmOutputResult := &helper.LLMOutputResult{}
 	parsedChatGPTResult := llmOutputResult.BuildLLMOutputResult(chatGPTResult)
 
-	log.Printf("1st title%s", parsedChatGPTResult.JiraTicketsInfo[0].Title)
-	log.Printf("2nd title%s", parsedChatGPTResult.JiraTicketsInfo[2].Title)
-	log.Printf("3rd title%s", parsedChatGPTResult.JiraTicketsInfo[3].Title)
-	log.Printf("4th title%s", parsedChatGPTResult.JiraTicketsInfo[4].Title)
-
-	// TODO: create ticket
+	// Create ticket
 	jiraClient := jira.NewJiraClient(baseURL, username, apiToken, projectID)
 
-	ticket, err := jiraClient.GetTicket("BDEP-15")
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
+	log.Printf("create first ticket")
+	ticketFirst := jiraClient.CreateTicket(
+		parsedChatGPTResult.JiraTicketsInfo[0].Title,
+		parsedChatGPTResult.JiraTicketsInfo[0].Description,
+	)
 
-	log.Printf("get ticket %s", ticket)
+	log.Printf("create second ticket")
+	ticketSecond := jiraClient.CreateTicket(
+		parsedChatGPTResult.JiraTicketsInfo[1].Title,
+		parsedChatGPTResult.JiraTicketsInfo[1].Description,
+	)
+
+	jsonFirstTicket, err := json.Marshal(ticketFirst)
+	jsonSecondTicket, err := json.Marshal(ticketSecond)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	log.Printf("first ticket created: %s", jsonFirstTicket)
+	log.Printf("second ticket created: %s", jsonSecondTicket)
 }
 
 func chooseRandomBetween(arrayString []string) string {
-	log.Printf("select random value to pick between %s", arrayString)
+	log.Printf("select random prompt input to picked in config:")
 	s := rand.NewSource(time.Now().Unix())
 	r := rand.New(s) // initialize local pseudorandom generator
 	randomValuePicked := arrayString[r.Int()%len(arrayString)]
-	log.Printf("randomeValuePicked %s", randomValuePicked)
+	log.Printf("%s", randomValuePicked)
 	return randomValuePicked
 }

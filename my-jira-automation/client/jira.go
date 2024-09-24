@@ -28,27 +28,29 @@ func NewJiraClient(baseURL, userName, apiToken, projectID string) *JiraClient {
 }
 
 func (c *JiraClient) CreateTicket(summary string, description string) string {
-	postUrl := fmt.Sprintf("%s/rest/api/2/issue/%s", c.baseUrl)
+	postUrl := fmt.Sprintf("%s/rest/api/2/issue", c.baseUrl)
 
 	body := fmt.Sprintf(`{
-	  "fields": {
-		"issuetype": {
-		  "name": "Story"
-		},
-		"parent": {
-		  "key": "BDEP-2"
-		},
-		"project": {
-		  "key": "BDEP"
-		},
-		"summary": "%s"
-		"description": "%s",
-	  }
-	}`, summary, description)
+		  "fields": {
+			"issuetype": {
+			  "name": "Story"
+			},
+			"parent": {
+			  "key": "BDEP-2"
+			},
+			"project": {
+			  "key": "BDEP"
+			},
+			"summary": "%s",
+			"description": "%s"
+		  }
+		}`, summary, description)
 
 	bodyByte := []byte(body)
 	request, err := http.NewRequest("POST", postUrl, bytes.NewBuffer(bodyByte))
 
+	// Set the authentication header
+	request.SetBasicAuth(c.userName, c.apiToken)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,14 +73,14 @@ func (c *JiraClient) CreateTicket(summary string, description string) string {
 	if res.StatusCode == http.StatusCreated || res.StatusCode == http.StatusOK {
 		log.Println("Ticket created successfully!")
 	} else {
-		log.Printf("Failed to create ticket. Status: %s\n", res.Status)
+		log.Printf("Failed to create ticket. Status: %s, Body: %s\n", res.Status, res.Body)
 	}
 	return string(readBodyResponse)
 }
 
 // GetTicket get a ticket from Jira
 func (c *JiraClient) GetTicket(ticketKey string) (map[string]interface{}, error) {
-	url := fmt.Sprintf("%s/rest/api/2/issue/%s", c.baseUrl, ticketKey)
+	url := fmt.Sprintf("%s/rest/api/2/issue/%s/worklog", c.baseUrl, ticketKey)
 
 	// Create a new HTTP request
 	req, err := http.NewRequest("GET", url, nil)
@@ -103,7 +105,6 @@ func (c *JiraClient) GetTicket(ticketKey string) (map[string]interface{}, error)
 		bodyBytes, _ := io.ReadAll(resp.Body)
 		return nil, fmt.Errorf("failed to get ticket: %s", string(bodyBytes))
 	}
-
 	// Parse the response body into a map
 	var result map[string]interface{}
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
