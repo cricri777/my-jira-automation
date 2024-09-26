@@ -71,6 +71,10 @@ func main() {
 	}
 	log.Printf("first ticket created: %s", jsonFirstTicket)
 	log.Printf("second ticket created: %s", jsonSecondTicket)
+
+	// update tempo
+	tempo := os.Getenv("TEMPO_API_KEY")
+	log.Printf(tempo)
 }
 
 func chooseRandomBetween(arrayString []string) string {
