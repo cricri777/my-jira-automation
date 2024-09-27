@@ -80,7 +80,7 @@ func (c *JiraClient) CreateTicket(summary string, description string) string {
 
 // GetTicket get a ticket from Jira
 func (c *JiraClient) GetTicket(ticketKey string) (map[string]interface{}, error) {
-	url := fmt.Sprintf("%s/rest/api/2/issue/%s/worklog", c.baseUrl, ticketKey)
+	url := fmt.Sprintf("%s/rest/api/2/issue/%s", c.baseUrl, ticketKey)
 
 	// Create a new HTTP request
 	req, err := http.NewRequest("GET", url, nil)
