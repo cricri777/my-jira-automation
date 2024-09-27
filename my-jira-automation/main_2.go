@@ -1,11 +1,9 @@
 package main
 
 import (
-	"bytes"
-	"fmt"
-	"io"
+	jira "ca.cricri/m/v2/my-jira-automation/client"
+	"encoding/json"
 	"log"
-	"net/http"
 	"os"
 )
 
@@ -13,53 +11,69 @@ import (
 func main() {
 	// update tempo
 	tempo := os.Getenv("TEMPO_API_KEY")
+	projectAccountId := os.Getenv("JIRA_ACCOUNT_ID")
 
-	postUrl := fmt.Sprintf("https://api.tempo.io/4/worklogs")
+	authorAccountId := "authorAccountId" // authorAccountId
+	issueId := "issueId"
+	startDate := "startDate"
+	timeSpentSeconds := "timeSpentSeconds"
 
-	body := fmt.Sprintf(`{
-		  "fields": {
-			"issuetype": {
-			  "name": "Story"
-			},
-			"parent": {
-			  "key": "BDEP-2"
-			},
-			"project": {
-			  "key": "BDEP"
-			},
-			"summary": "%s",
-			"description": "%s"
-		  }
-		}`, summary, description)
+	baseURL := os.Getenv("JIRA_BASE_URL")
+	username := os.Getenv("JIRA_USERNAME")
+	projectID := os.Getenv("JIRA_PROJECT_ID")
+	apiToken := os.Getenv("JIRA_API_TOKEN")
 
-	bodyByte := []byte(body)
-	request, err := http.NewRequest("POST", postUrl, bytes.NewBuffer(bodyByte))
+	// Create ticket
+	jiraClient := jira.NewJiraClient(baseURL, username, apiToken, projectID)
 
-	// Set the authentication header
-	request.SetBasicAuth(c.userName, c.apiToken)
+	ticket, err := jiraClient.GetTicket("BDEP-23")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	request.Header.Add("Content-Type", "application/json")
-
-	client := &http.Client{}
-	res, err := client.Do(request)
+	jsonTicket, err := json.Marshal(ticket)
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("get ticket created: %s", jsonTicket)
+	println(jsonTicket)
+	println(authorAccountId)
+	println(issueId)
+	println(startDate)
+	println(timeSpentSeconds)
+	println(tempo + ";")
+	println(projectAccountId + ";")
 
-	defer res.Body.Close()
+	//postUrl := fmt.Sprintf("https://api.tempo.io/4/worklogs")
 
-	readBodyResponse, err := io.ReadAll(res.Body)
-	if err != nil {
-		log.Println("Error reading response body:", err)
-	}
-
-	if res.StatusCode == http.StatusCreated || res.StatusCode == http.StatusOK {
-		log.Println("Ticket created successfully!")
-	} else {
-		log.Printf("Failed to create ticket. Status: %s, Body: %s\n", res.Status, res.Body)
-	}
+	//bodyByte := []byte(body)
+	//request, err := http.NewRequest("POST", postUrl, bytes.NewBuffer(bodyByte))
+	//
+	//// Set the authentication header
+	//request.SetBasicAuth(c.userName, c.apiToken)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//request.Header.Add("Content-Type", "application/json")
+	//
+	//client := &http.Client{}
+	//res, err := client.Do(request)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//defer res.Body.Close()
+	//
+	//readBodyResponse, err := io.ReadAll(res.Body)
+	//if err != nil {
+	//	log.Println("Error reading response body:", err)
+	//}
+	//
+	//if res.StatusCode == http.StatusCreated || res.StatusCode == http.StatusOK {
+	//	log.Println("Ticket created successfully!")
+	//} else {
+	//	log.Printf("Failed to create ticket. Status: %s, Body: %s\n", res.Status, res.Body)
+	//}
 
 }
