@@ -18,4 +18,3 @@ Automate my jira issue creation
 
 ### Tempo Doc worklog
 https://apidocs.tempo.io/#tag/Worklogs/operation/getWorklogs
-
