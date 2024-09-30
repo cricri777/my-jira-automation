@@ -14,21 +14,21 @@ class Jira:
         logging.debug(f"Create jira object with jira_user={jira_username}"
                       f", jira_toker=REDACTED,"
                       f" jira_project_id={jira_project_id}")
-        self.jira_base_url = jira_base_url
-        self.jira_api_token = jira_api_token
-        self.jira_user_name = jira_username
-        self.jira_project_id = jira_project_id
+        self._jira_base_url = jira_base_url
+        self._jira_api_token = jira_api_token
+        self._jira_user_name = jira_username
+        self._jira_project_id = jira_project_id
 
     def get_ticket(self, ticket_id: str):
-        jira_url = f"{self.jira_base_url}/rest/api/2/issue/{ticket_id}"
-        jira_json_response = get_request(jira_url, self.jira_user_name, self.jira_api_token)
+        jira_url = f"{self._jira_base_url}/rest/api/2/issue/{ticket_id}"
+        jira_json_response = get_request(jira_url, self._jira_user_name, self._jira_api_token)
         logging.info(f"received jira response {jira_json_response}")
         return jira_json_response
 
 
     def create_ticket(self, summary: str, description: str):
         logging.debug(f"creating ticket with summary {summary}, description {description}")
-        jira_url = f"{self.jira_base_url}/rest/api/2/issue"
+        jira_url = f"{self._jira_base_url}/rest/api/2/issue"
         body = f"""
             "fields": {
                 "issuetype": {
@@ -45,5 +45,5 @@ class Jira:
             }
         """
 
-        jira_json_response = post_request(jira_url, self.jira_user_name, self.jira_api_token, body)
+        jira_json_response = post_request(jira_url, self._jira_user_name, self._jira_api_token, body)
         logging.info(f"created ticket response={jira_json_response}")

@@ -2,7 +2,6 @@ import logging
 from urllib.parse import urlparse
 
 import requests
-from Tools.scripts.generate_opcode_h import header
 from requests.auth import HTTPBasicAuth
 
 
@@ -13,7 +12,7 @@ def get_request(url: str, username, password):
     if response.status_code == 200:
         return response.json()
     else:
-        logging.warning(f"status code {response.status_code}, response={response.json()}")
+        logging.warning("get request:", response.status_code, response.text)
         return response.json()
 
 
@@ -24,12 +23,11 @@ def post_request(url: str, username: str, password: str, body: str):
     if response.status_code == 200:
         return response.json()
     else:
-        logging.warning(f"status code {response.status_code}, response={response.json()}")
+        logging.warning("post request:", response.status_code, response.text)
         return response.json()
 
 
-def post_request_bearer(url:str, bearer_token:str, prompt: str, data: dict):
-    # TODO complete this
+def post_request_bearer(url:str, bearer_token:str, data: dict):
     url_validate(url)
     logging.debug(f"POST request bearer {url}")
     headers = {
@@ -41,7 +39,7 @@ def post_request_bearer(url:str, bearer_token:str, prompt: str, data: dict):
         logging.debug("Response :", response.json())
         logging.debug(response.json()['choices'][0]['message']['content'])
     else:
-        logging.warning("Error:", response.status_code, response.text)
+        logging.warning("post request bearer:", response.status_code, response.text)
     return response.json()
 
 
