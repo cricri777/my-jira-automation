@@ -15,6 +15,18 @@ def get_request(url: str, username, password):
         logging.warning(f"status code {response.status_code}, response={response.json()}")
         return response.json()
 
+
+def post_request(url: str, username: str, password: str, body: str):
+    url_validate(url)
+    logging.debug(f"POST request {url}")
+    response = requests.post(url, auth=HTTPBasicAuth(username, password), data=body)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        logging.warning(f"status code {response.status_code}, response={response.json()}")
+        return response.json()
+
+
 def url_validate(url_to_validate: str):
     result = urlparse(url_to_validate)
     is_url_valid = result.scheme and result.netloc

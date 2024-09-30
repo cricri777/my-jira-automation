@@ -1,6 +1,6 @@
 import logging
 
-from lib.http import get_request
+from lib.http import get_request, post_request
 
 
 class Jira:
@@ -26,3 +26,24 @@ class Jira:
         return jira_json_response
 
 
+    def create_ticket(self, summary: str, description: str):
+        logging.debug(f"creating ticket with summary {summary}, description {description}")
+        jira_url = f"{self.jira_base_url}/rest/api/2/issue"
+        body = f"""
+            "fields": {
+                "issuetype": {
+                    "name": "Story"
+                },
+                "parent": {
+                    "key": "BDEP-2"
+                },
+                "project": {
+                    "key": "BDEP"
+                },
+                "summary": "{summary}",
+                "description": "{description}"
+            }
+        """
+
+        jira_json_response = post_request(jira_url, self.jira_user_name, self.jira_api_token, body)
+        logging.info(f"created ticket response={jira_json_response}")
