@@ -28,15 +28,17 @@ def run():
     configuration = yaml_config.get_config()
 
     dataeng_prompt = configuration["jira"]["prompt"][0]["dataEngineer"]
-    chatGPT = ChatGPT(openai_api_key)
+    chat_gpt = ChatGPT(openai_api_key)
 
-    jira_tickets_info = chatGPT.generate_prompt(dataeng_prompt)['choices'][0]['message']['content']
+    jira_tickets_info = chat_gpt.generate_prompt(dataeng_prompt)['choices'][0]['message']['content']
 
-    # create ticket with jira
+    # create jira tickets
     for jira_ticket_info in jira_tickets_info:
-        jira_response = jira_client.create_ticket(jira_ticket_info)
-        logging.info(jira_response)
+        jira_response = jira_client.create_ticket(summary=jira_ticket_info["title"],
+                                                  description=jira_tickets_info["description"])
+        logging.info(f"jira_response={jira_response}")
 
+        # TODO add tempo
 
 
 if __name__ == '__main__':
