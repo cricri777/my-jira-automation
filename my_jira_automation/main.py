@@ -2,7 +2,7 @@ import logging
 import os
 
 from lib.jira import Jira
-from lib.llm import ChatGPT
+from lib.openai import ChatGPT
 from lib.yaml import YamlConfig
 
 
@@ -24,13 +24,20 @@ def run():
                        jira_project_id=jira_project_id)
     print(jira_client.get_ticket("BDEP-2"))
 
-    # TODO link chatgpt
-    # TODO read config file
     yaml_config = YamlConfig()
     configuration = yaml_config.get_config()
-    print(yaml_config.get_config())
-    # chat_gpt = ChatGPT(openai_api_key)
-    # chat_gpt.generate_prompt()
+
+    dataeng_prompt = configuration["jira"]["prompt"][0]["dataEngineer"]
+    chatGPT = ChatGPT(openai_api_key)
+
+    jira_tickets_info = chatGPT.generate_prompt(dataeng_prompt)['choices'][0]['message']['content']
+
+    # create ticket with jira
+    for jira_ticket_info in jira_tickets_info:
+        jira_response = jira_client.create_ticket(jira_ticket_info)
+        logging.info(jira_response)
+
+
 
 if __name__ == '__main__':
     run()

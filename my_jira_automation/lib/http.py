@@ -37,7 +37,7 @@ def post_request_bearer(url:str, bearer_token:str, data: dict):
     response = requests.post(url, headers=headers, json=data)
     if response.status_code == 200:
         logging.debug("Response :", response.json())
-        logging.debug(response.json()['choices'][0]['message']['content'])
+        logging.debug(response.json())
     else:
         logging.warning("post request bearer:", response.status_code, response.text)
     return response.json()
