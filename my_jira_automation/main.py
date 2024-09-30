@@ -22,5 +22,9 @@ def run():
                        jira_project_id=jira_project_id)
     print(jira_client.get_ticket("BDEP-2"))
 
+    # TODO link chatgpt
+    # TODO read config file
+    
+
 if __name__ == '__main__':
     run()

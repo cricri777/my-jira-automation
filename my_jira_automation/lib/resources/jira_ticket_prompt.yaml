@@ -1,0 +1,41 @@
+apiVersion: v0
+jira:
+  prompt:
+  - dataEngineer: "As a data engineer I would like to create 2 Jira stories related to my work for the week,
+        I don't care if it's true I don't need it, just to log my time to my manager approval...
+        you can add keyword like those: [cloud aws, snowflake, databricks, data vault, hashicorp vault, bitbucket, python, dbt].
+        I can give you some examples of title separated by ; but don't copy them word for word: First Week Onboarding (part 1);First Week Onboarding (part 2);Setup PI Planning;Working On Migrating to STS Vault;Working On Migrating to STS Vault Part 2;Migrating App Subscriber to STS Vault;Migrating App Subscriber to STS Vault Part 2;Migrating to STS Vault;Migrating STS Vault Part 2;Bug Fix Zone;Bug Fix Consumption scheduler;Create Infra for Collibra Update;Activé POC AWS Airflow;Close Jira ticket from Git Commit Message;Implement alert notification on certified zone;
+        I just want a json as output, no other text from you, this is the json format ouptut that I need :
+        {
+          \"jira_tickets_info\": [
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 1
+            },
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 2
+            }
+          ]
+        }"
+  - devOps: "As a devops engineer I would like to create 2 Jira stories (one per day of the week) related to my work,
+        I don't care if it's true I don't need it, just to log my time to my manager approval...
+        you can add keyword like those: [cloud aws, snowflake, databricks, data vault, hashicorp vault, bitbucket, python, dbt]
+        I can give you some examples of title separated by ; but don't copy them word for word: First Week Onboarding (part 1);First Week Onboarding (part 2);Setup PI Planning;Working On Migrating to STS Vault;Working On Migrating to STS Vault Part 2;Migrating App Subscriber to STS Vault;Migrating App Subscriber to STS Vault Part 2;Migrating to STS Vault;Migrating STS Vault Part 2;Bug Fix Zone;Bug Fix Consumption scheduler;Create Infra for Collibra Update;Activé POC AWS Airflow;Close Jira ticket from Git Commit Message;Implement alert notification on certified zone;
+        I just want a json as output, no other text from you, this is the json format ouptut that I need :
+        {
+          \"jira_tickets_info\": [
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 1
+            },
+            {
+              \"title\":  \"my_title\",
+              \"description\": \"my description\",
+              \"day\": 2
+            }
+          ]
+        }"
