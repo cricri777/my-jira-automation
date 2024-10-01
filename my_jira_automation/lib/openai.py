@@ -1,7 +1,8 @@
 import logging
 
+from lib import log
 from lib.http import post_request_bearer
-
+logger = log.setup_custom_logger(__name__)
 
 class ChatGPT:
 
