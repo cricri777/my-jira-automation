@@ -35,17 +35,29 @@ def run():
 
     dataeng_prompt = configuration["jira"]["prompt"][0]["dataEngineer"]
     chat_gpt = ChatGPT(openai_api_key)
+    chat_gpt_output = chat_gpt.generate_prompt(dataeng_prompt)
 
-    jira_tickets_info = json.loads(chat_gpt.generate_prompt(dataeng_prompt)["choices"][0]["message"]["content"])
+    logger.info(f"chat_gpt_output={chat_gpt_output['choices']}")
+    jira_tickets_info = json.loads(chat_gpt_output["choices"][0]["message"]["content"])
     weekdays = get_weekdays()
     logger.debug(f"weekdays={weekdays}")
-    tempo = Tempo(tempo_api_key=tempo_api_key, project_account_id=jira_account_id)
+    jira_tickets = list()
     for jira_ticket_info in jira_tickets_info["jira_tickets_info"]:
         logger.debug(jira_ticket_info)
         jira_response = jira_client.create_ticket(summary=jira_ticket_info["title"],
                                                   description=jira_ticket_info["description"])
-        logger.info(f"{len(jira_response)} jira info response generated")
-        # tempo_response = tempo.add_worklog_safely(issue_key=jira_ticket, worklog_date=weekdays[4])
+        jira_tickets.append(jira_response["key"])
+
+    # adding worklog to tempo to the jira tickets created above
+    if len(weekdays) == 5:
+        tempo = Tempo(tempo_api_key=tempo_api_key, project_account_id=jira_account_id)
+        logger.info(f"adding tempo worklog: {tempo.add_worklog_safely(issue_key=jira_tickets[0], worklog_date=weekdays[0])}")
+        logger.info(f"adding tempo worklog: {tempo.add_worklog_safely(issue_key=jira_tickets[0], worklog_date = weekdays[1])}")
+        logger.info(f"adding tempo worklog: {tempo.add_worklog_safely(issue_key=jira_tickets[0], worklog_date=weekdays[2])}")
+        logger.info(f"adding tempo worklog: {tempo.add_worklog_safely(issue_key=jira_tickets[1], worklog_date = weekdays[3])}")
+        logger.info(f"adding tempo worklog: {tempo.add_worklog_safely(issue_key=jira_tickets[1], worklog_date=weekdays[4])}")
+    else:
+        logger.warning(f"wrong number of week day for {weekdays}")
 
 if __name__ == "__main__":
     run()

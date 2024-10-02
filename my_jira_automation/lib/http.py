@@ -22,7 +22,7 @@ def post_request(url: str, username: str, password: str, body: dict) -> dict:
     url_validate(url)
     logger.debug(f"POST request {url}")
     response = requests.post(url, auth=HTTPBasicAuth(username, password), json=body)
-    if 300 < response.status_code >= 200:
+    if 300 > response.status_code >= 200:
         return response.json()
     else:
         logger.warning(f"post request: status={response.status_code}, response={response.json()}")
@@ -37,7 +37,7 @@ def post_request_bearer(url:str, bearer_token:str, data: dict) -> dict:
         "Authorization": f"Bearer {bearer_token}"
     }
     response = requests.post(url, headers=headers, json=data)
-    if response.status_code == 200:
+    if 300 > response.status_code >= 200:
         logger.debug(f"Response : {response.json()}")
     else:
         logger.warning(f"post request bearer: status={response.status_code}, response={response.json()}")

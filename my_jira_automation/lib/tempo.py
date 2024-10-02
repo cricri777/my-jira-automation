@@ -14,13 +14,15 @@ class Tempo:
                            issue_key: str,
                            worklog_date: str,
                            time_spent_seconds: int = 27000,
-                           description: str = ""):
+                           description: str = "",
+                           start_time: str = "09:00:00"):
         """if some worklog(s) already exists to the worklog_date we do nothing,
         else add_worklog
         :param issue_key:
         :param worklog_date:
         :param time_spent_seconds:
         :param description:
+        :param start_time:
         :return:
         """
         request_worklog_params = {
@@ -28,26 +30,33 @@ class Tempo:
             "from": worklog_date,
             "to": worklog_date
         }
-        worklogs_to_validate = get_request_bearer(url=TEMPO_BASE_URL, bearer_token=self.tempo_api_key, params=request_worklog_params)
-        logger.debug(f"check entried hours in {worklogs_to_validate}")
-        if len(worklogs_to_validate) > 0:
+        worklogs_to_validate = get_request_bearer(url=TEMPO_BASE_URL,
+                                                  bearer_token=self.tempo_api_key,
+                                                  params=request_worklog_params)
+        logger.debug(f"check entried hours in {worklogs_to_validate['results']}")
+        if len(worklogs_to_validate["results"]) > 0:
             logger.info(f"Found some worklog(s) in Tempo at the date={worklog_date} so we don't add anything")
             return None
         else:
-            return self.add_worklog(issue_key=issue_key, worklog_date=worklog_date)
+            return self.add_worklog(issue_key=issue_key,
+                                    worklog_date=worklog_date,
+                                    time_spent_seconds=time_spent_seconds,
+                                    description=description,
+                                    start_time=start_time)
 
 
     def add_worklog(self,
                     issue_key: str,
                     worklog_date: str,
                     time_spent_seconds: int = 27000,
-                    description: str = ""):
+                    description: str = "",
+                    start_time: str = "09:00:00"):
         payload = {
             "authorAccountId": self.project_account_id,
             "issueKey": issue_key,
             "timeSpentSeconds": time_spent_seconds,
             "startDate": worklog_date,
-            "startTime": "09:00:00",
+            "startTime": start_time,
             "description": description
         }
         logger.debug(f"add tempo workload with payload={payload}")

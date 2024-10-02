@@ -29,7 +29,7 @@ class Jira:
 
 
     def create_ticket(self, summary: str, description: str):
-        logger.debug(f"creating ticket with summary {summary}, description {description}")
+        logger.debug(f"creating ticket with summary={summary}, description={description}")
         jira_url = f"{self._jira_base_url}/rest/api/2/issue"
         body = {
             "fields": {
@@ -50,3 +50,4 @@ class Jira:
 
         jira_json_response = post_request(jira_url, self._jira_user_name, self._jira_api_token, body)
         logger.info(f"created ticket response={jira_json_response}")
+        return jira_json_response
