@@ -1,10 +1,9 @@
 import json
-import logging
 
 from lib import log
 from lib.http import get_request, post_request
 
-logger = log.setup_custom_logger(__name__)
+logger = log.get_logger(__name__)
 
 class Jira:
 # TODO create ticket

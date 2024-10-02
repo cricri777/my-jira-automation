@@ -1,8 +1,7 @@
-import logging
 
 from lib import log
 from lib.http import post_request_bearer
-logger = log.setup_custom_logger(__name__)
+logger = log.get_logger(__name__)
 
 class ChatGPT:
 
@@ -12,7 +11,7 @@ class ChatGPT:
         self._token = open_ai_token
 
     def generate_prompt(self, prompt: str):
-        logging.debug(f"requesting chaGPT prompt")
+        logger.debug(f"requesting chaGPT prompt")
         data = {
             "model": "gpt-3.5-turbo",
             "messages": [
