@@ -20,7 +20,7 @@ Ensure you have the following installed:
 - Python 3.10.11
 - Packages: PyYAML, pip, requests, wheel
 
-## Installation
+## Installation for development
 1. Clone the repository:
     ```sh
     git clone <your-repo-url>
@@ -31,6 +31,19 @@ Ensure you have the following installed:
     ```sh
     pip install -r requirements.txt
     ```
+
+## Deploy on AWS lambda
+### Packaging
+```shell
+mkdir package
+pip install -r requirements.txt -t package/
+cp -r my_jira_automation/* package/
+cd package
+zip -r ../lambda_function.zip .
+```
+
+##### Upload Code
+
 
 ## Usage
 1. Configure your JIRA and Tempo API settings in a configuration file inside `resources/config.yaml`
