@@ -14,12 +14,22 @@ from lib.yaml import YamlConfig
 logger = log.get_logger(__name__)
 
 def run():
+    """Executes the main workflow for Jira ticket automation, which involves the following steps:
+    1. Fetches environment variables required for Jira and OpenAI API authentication.
+    2. Logs the initial configuration and credentials.
+    3. Creates a Jira client instance using the provided credentials.
+    4. Loads configuration from a YAML file.
+    5. Generates a prompt for the data engineer role using OpenAI's ChatGPT.
+    6. Parses the generated prompt to extract Jira ticket information.
+    7. Iterates over the extracted ticket information to create Jira tickets using the Jira client.
+    8. If the number of weekdays is equal to 5, adds worklogs to Tempo for the created Jira tickets.
 
+    :return: None
+    """
     jira_base_url = os.getenv("JIRA_BASE_URL")
     jira_username = os.getenv("JIRA_USERNAME")
     jira_api_token = os.getenv("JIRA_API_TOKEN")
     jira_project_id = os.getenv("JIRA_PROJECT_ID")
-    # aws_profile = os.getenv("AWS_PROFILE")
     jira_account_id = os.getenv("JIRA_ACCOUNT_ID")
     openai_api_key = os.getenv("OPENAI_API_KEY")
     tempo_api_key = os.getenv("TEMPO_API_KEY")

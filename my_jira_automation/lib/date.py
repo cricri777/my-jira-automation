@@ -5,6 +5,10 @@ from lib import log
 logger = log.get_logger(__name__)
 
 def get_weekdays() -> list:
+    """
+    :return: A list of strings representing the dates for the weekdays (Monday to Friday)
+    of the current week in 'YYYY-MM-DD' format.
+    """
     logger.debug("getting weekday")
     today = datetime.now()
     start_of_week = today - timedelta(days=today.weekday())

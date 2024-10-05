@@ -16,8 +16,7 @@ class Tempo:
                            time_spent_seconds: int = 27000,
                            description: str = "",
                            start_time: str = "09:00:00"):
-        """if some worklog(s) already exists to the worklog_date we do nothing,
-        else add_worklog
+        """if some worklog(s) already exists to the worklog_date we do nothing, else add_worklog
         :param issue_key:
         :param worklog_date:
         :param time_spent_seconds:
@@ -51,6 +50,14 @@ class Tempo:
                     time_spent_seconds: int = 27000,
                     description: str = "",
                     start_time: str = "09:00:00"):
+        """
+        :param issue_key: Key of the Jira issue to which the worklog is to be added.
+        :param worklog_date: Date for the worklog entry in YYYY-MM-DD format.
+        :param time_spent_seconds: Amount of time spent on the issue in seconds. Default is 27000 (7.5 hours).
+        :param description: Description or comment for the worklog. Default is an empty string.
+        :param start_time: Start time of the worklog in HH:MM:SS format. Default is "09:00:00".
+        :return: Response from the POST request to Tempo API with the provided worklog details.
+        """
         payload = {
             "authorAccountId": self.project_account_id,
             "issueKey": issue_key,

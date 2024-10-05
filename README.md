@@ -46,6 +46,7 @@ Ensure you have the following installed:
 - ~~Create Tempo for the current week~~
 - Add Skipping holiday
 - add more comments docstring
+- schedule it with aws (eventbridge lambda)
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.

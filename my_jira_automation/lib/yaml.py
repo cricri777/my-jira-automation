@@ -15,6 +15,11 @@ class YamlConfig:
 
 
     def get_config(self):
+        """
+        Read the YAML configuration from the file specified by the config path.
+
+        :return: The loaded YAML configuration as a dictionary.
+        """
         logger.debug(f"read yaml configuration {self._config_path.resolve()}")
         with open(self._config_path) as config:
             return yaml.safe_load(config)
