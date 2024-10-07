@@ -1,0 +1,4 @@
+-r requirements.txt
+boto3
+botocore
+mypy-boto3-secretsmanager

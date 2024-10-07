@@ -29,7 +29,7 @@ cd my-jira-automation
 
 ### Install the required packages:
 ```sh
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
 ## Deploy on AWS lambda
@@ -58,6 +58,7 @@ python main.py
 - ~~Create JIRA ticket~~
 - ~~Create Tempo for the current week~~
 - Add Skipping holiday
+- Aws secretmanager integration
 - ~~Add more comments docstring~~
 - ~~Schedule it with aws (eventbridge lambda)~~
 

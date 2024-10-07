@@ -1,5 +1,2 @@
 requests
 pyyaml
-boto3
-botocore
-mypy-boto3-secretsmanager
