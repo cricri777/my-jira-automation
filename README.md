@@ -21,16 +21,16 @@ Ensure you have the following installed:
 - Packages: PyYAML, pip, requests, wheel
 
 ## Installation for development
-1. Clone the repository:
-    ```sh
-    git clone <your-repo-url>
-    cd my-jira-automation
-    ```
+### Clone the repository:
+```sh
+git clone <your-repo-url>
+cd my-jira-automation
+```
 
-2. Install the required packages:
-    ```sh
-    pip install -r requirements.txt
-    ```
+### Install the required packages:
+```sh
+pip install -r requirements.txt
+```
 
 ## Deploy on AWS lambda
 ### Packaging
@@ -48,9 +48,9 @@ zip -r ../lambda_function.zip .
 ## Usage
 1. Configure your JIRA and Tempo API settings in a configuration file inside `resources/config.yaml`
 2. Run the main script to start the automation process:
-    ```sh
-    python main.py
-    ```
+```sh
+python main.py
+```
 
 ## TODO
 - ~~Use LLM to generate prompt to log JIRA ticket with summary and description~~
@@ -58,8 +58,8 @@ zip -r ../lambda_function.zip .
 - ~~Create JIRA ticket~~
 - ~~Create Tempo for the current week~~
 - Add Skipping holiday
-- add more comments docstring
-- schedule it with aws (eventbridge lambda)
+- ~~Add more comments docstring~~
+- ~~Schedule it with aws (eventbridge lambda)~~
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License—see the [LICENSE](LICENSE) file for details.
