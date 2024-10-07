@@ -17,9 +17,9 @@ class Secrets:
             client: SecretsManagerClient = session.client(service_name="secretsmanager", region_name="ca-central-1")
             response = client.get_secret_value(SecretId="my-jira-automation")
             secret = json.loads(response["SecretString"])
-            self._jira_api_token = base64.b64decode(secret.get("JIRA_API_TOKEN"))
-            self._openai_api_key = base64.b64decode(secret.get("OPENAI_API_KEY"))
-            self._tempo_api_key = base64.b64decode(secret.get("TEMPO_API_KEY"))
+            self._jira_api_token = base64.b64decode(secret.get("JIRA_API_TOKEN")).decode("utf-8")
+            self._openai_api_key = base64.b64decode(secret.get("OPENAI_API_KEY")).decode("utf-8")
+            self._tempo_api_key = base64.b64decode(secret.get("TEMPO_API_KEY")).decode("utf-8")
         else:
             logger.info("fetching configuration from env variables")
             self._jira_api_token = os.getenv("JIRA_API_TOKEN")

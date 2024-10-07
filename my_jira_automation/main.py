@@ -1,4 +1,5 @@
 import json
+import sys
 
 from lib import log
 
@@ -37,6 +38,15 @@ def run(is_secret_manager=False):
     secrets = Secrets(is_secret_manager)
     jira_api_token, openai_api_key, tempo_api_key = secrets.jira_api_token, secrets.openai_api_key, secrets.tempo_api_key
 
+    weekdays = get_weekdays()
+    logger.debug(f"weekdays={weekdays}")
+
+    logger.info("validate if we need tempo is already filled")
+    tempo = Tempo(tempo_api_key=tempo_api_key, project_account_id=jira_account_id)
+    if tempo.is_week_almost_full(weekdays):
+        logger.info("tempo is already filled for the week, closing now")
+        sys.exit(0)
+
     logger.info(f"jira ticket automation: jira_url={jira_base_url}, jira_user={jira_username}, jira_token=REDACTED")
     jira_client = Jira(jira_base_url=jira_base_url,
                        jira_username=jira_username,
@@ -52,8 +62,7 @@ def run(is_secret_manager=False):
 
     logger.info(f"chat_gpt_output={chat_gpt_output['choices']}")
     jira_tickets_info = json.loads(chat_gpt_output["choices"][0]["message"]["content"])
-    weekdays = get_weekdays()
-    logger.debug(f"weekdays={weekdays}")
+
     jira_tickets = list()
     for jira_ticket_info in jira_tickets_info["jira_tickets_info"]:
         logger.debug(jira_ticket_info)
@@ -63,7 +72,7 @@ def run(is_secret_manager=False):
 
     # adding worklog to tempo to the jira tickets created above
     if len(weekdays) == 5:
-        tempo = Tempo(tempo_api_key=tempo_api_key, project_account_id=jira_account_id)
+
         logger.info(f"adding tempo worklog: {tempo.add_worklog_safely(issue_key=jira_tickets[0], worklog_date=weekdays[0])}")
         logger.info(f"adding tempo worklog: {tempo.add_worklog_safely(issue_key=jira_tickets[0], worklog_date = weekdays[1])}")
         logger.info(f"adding tempo worklog: {tempo.add_worklog_safely(issue_key=jira_tickets[0], worklog_date=weekdays[2])}")

@@ -10,6 +10,34 @@ class Tempo:
         self.tempo_api_key = tempo_api_key
         self.project_account_id = project_account_id
 
+    def is_week_almost_full(self, weekdays: list):
+        """if current week in tempo is have more than 30 hours logged in, then we return False
+        else True
+
+        :param weekdays:
+        :return:
+        """
+        assert len(weekdays) == 5, "weekdays should be 5"
+
+        request_worklog_params = {
+            "authorAccountId": self.project_account_id,
+            "from": weekdays[0],
+            "to": "2024-10-12"
+        }
+        worklogs_to_validate = get_request_bearer(url=TEMPO_BASE_URL,
+                                                  bearer_token=self.tempo_api_key,
+                                                  params=request_worklog_params)
+        total_work_time_of_current_week = 0
+        for worklog in worklogs_to_validate["results"]:
+            total_work_time_of_current_week += worklog.get("timeSpentSeconds", 0)
+
+        if total_work_time_of_current_week > 108000:
+            logger.info(f"more than 30 hours logged this week, ({total_work_time_of_current_week} seconds)")
+            return True
+        else:
+            logger.info(f"less than 30 hours logged this week, ({total_work_time_of_current_week} seconds)")
+            return False
+
     def add_worklog_safely(self,
                            issue_key: str,
                            worklog_date: str,
