@@ -7,13 +7,14 @@ import os
 from lib.date import get_weekdays
 from lib.jira import Jira
 from lib.openai import ChatGPT
+from lib.secrets import Secrets
 from lib.tempo import Tempo
 from lib.yaml import YamlConfig
 
 
 logger = log.get_logger(__name__)
 
-def run():
+def run(is_secret_manager=False):
     """Executes the main workflow for Jira ticket automation, which involves the following steps:
     1. Fetches environment variables required for Jira and OpenAI API authentication.
     2. Logs the initial configuration and credentials.
@@ -24,15 +25,17 @@ def run():
     7. Iterates over the extracted ticket information to create Jira tickets using the Jira client.
     8. If the number of weekdays is equal to 5, adds worklogs to Tempo for the created Jira tickets.
 
+    :param is_secret_manager:
     :return: None
     """
+
     jira_base_url = os.getenv("JIRA_BASE_URL")
     jira_username = os.getenv("JIRA_USERNAME")
-    jira_api_token = os.getenv("JIRA_API_TOKEN")
     jira_project_id = os.getenv("JIRA_PROJECT_ID")
     jira_account_id = os.getenv("JIRA_ACCOUNT_ID")
-    openai_api_key = os.getenv("OPENAI_API_KEY")
-    tempo_api_key = os.getenv("TEMPO_API_KEY")
+
+    secrets = Secrets(is_secret_manager)
+    jira_api_token, openai_api_key, tempo_api_key = secrets.jira_api_token, secrets.openai_api_key, secrets.tempo_api_key
 
     logger.info(f"jira ticket automation: jira_url={jira_base_url}, jira_user={jira_username}, jira_token=REDACTED")
     jira_client = Jira(jira_base_url=jira_base_url,
