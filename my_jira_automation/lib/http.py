@@ -72,7 +72,7 @@ def get_request_bearer(url:str, bearer_token:str, params:dict) -> dict:
     :return: The JSON response from the GET request as a dictionary.
     """
     url_validate(url)
-    logger.debug(f"GET request with bearer {url}")
+    logger.debug(f"GET request with bearer {url}, params=[{params}]")
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {bearer_token}"

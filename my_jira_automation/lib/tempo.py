@@ -18,11 +18,10 @@ class Tempo:
         :return:
         """
         assert len(weekdays) == 5, "weekdays should be 5"
-
         request_worklog_params = {
             "authorAccountId": self.project_account_id,
             "from": weekdays[0],
-            "to": "2024-10-12"
+            "to": weekdays[-1]
         }
         worklogs_to_validate = get_request_bearer(url=TEMPO_BASE_URL,
                                                   bearer_token=self.tempo_api_key,

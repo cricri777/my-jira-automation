@@ -1,5 +1,4 @@
 import json
-import sys
 
 from lib import log
 
@@ -45,7 +44,7 @@ def run(is_secret_manager=False):
     tempo = Tempo(tempo_api_key=tempo_api_key, project_account_id=jira_account_id)
     if tempo.is_week_almost_full(weekdays):
         logger.info("tempo is already filled for the week, closing now")
-        sys.exit(0)
+        return
 
     logger.info(f"jira ticket automation: jira_url={jira_base_url}, jira_user={jira_username}, jira_token=REDACTED")
     jira_client = Jira(jira_base_url=jira_base_url,

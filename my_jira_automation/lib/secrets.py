@@ -1,12 +1,13 @@
 import base64
 import json
-import logging
 import os
 
 import boto3
 from mypy_boto3_secretsmanager.client import SecretsManagerClient
 
-logger = logging.getLogger(__name__)
+from lib.log import get_logger
+
+logger = get_logger(__name__)
 
 class Secrets:
     """get secrets for API jira, tempo, openai from secretmanager or default environment variable"""
