@@ -1,9 +1,7 @@
 import json
-
-from lib import log
-
 import os
 
+from lib import log
 from lib.date import get_weekdays
 from lib.jira import Jira
 from lib.openai import ChatGPT
@@ -11,8 +9,8 @@ from lib.secrets import Secrets
 from lib.tempo import Tempo
 from lib.yaml import YamlConfig
 
-
 logger = log.get_logger(__name__)
+
 
 def run(is_secret_manager=False):
     """Executes the main workflow for Jira ticket automation, which involves the following steps:
@@ -33,6 +31,7 @@ def run(is_secret_manager=False):
     jira_username = os.getenv("JIRA_USERNAME")
     jira_project_id = os.getenv("JIRA_PROJECT_ID")
     jira_account_id = os.getenv("JIRA_ACCOUNT_ID")
+    tempo_base_url = os.getenv("TEMPO_BASE_URL")
 
     secrets = Secrets(is_secret_manager)
     jira_api_token, openai_api_key, tempo_api_key = secrets.jira_api_token, secrets.openai_api_key, secrets.tempo_api_key
@@ -41,7 +40,7 @@ def run(is_secret_manager=False):
     logger.debug(f"weekdays={weekdays}")
 
     logger.info("validate if we need tempo is already filled")
-    tempo = Tempo(tempo_api_key=tempo_api_key, project_account_id=jira_account_id)
+    tempo = Tempo(tempo_api_key=tempo_api_key, project_account_id=jira_account_id, tempo_base_url=tempo_base_url)
     if tempo.is_week_almost_full(weekdays):
         logger.info("tempo is already filled for the week, closing now")
         return
@@ -67,18 +66,24 @@ def run(is_secret_manager=False):
         logger.debug(jira_ticket_info)
         jira_response = jira_client.create_ticket(summary=jira_ticket_info["title"],
                                                   description=jira_ticket_info["description"])
-        jira_tickets.append(jira_response["key"])
+        jira_tickets.append(jira_response["id"])
 
     # adding worklog to tempo to the jira tickets created above
     if len(weekdays) == 5:
 
-        logger.info(f"adding tempo worklog: {tempo.add_worklog_safely(issue_key=jira_tickets[0], worklog_date=weekdays[0])}")
-        logger.info(f"adding tempo worklog: {tempo.add_worklog_safely(issue_key=jira_tickets[0], worklog_date = weekdays[1])}")
-        logger.info(f"adding tempo worklog: {tempo.add_worklog_safely(issue_key=jira_tickets[0], worklog_date=weekdays[2])}")
-        logger.info(f"adding tempo worklog: {tempo.add_worklog_safely(issue_key=jira_tickets[1], worklog_date = weekdays[3])}")
-        logger.info(f"adding tempo worklog: {tempo.add_worklog_safely(issue_key=jira_tickets[1], worklog_date=weekdays[4])}")
+        logger.info(
+            f"adding tempo worklog: {tempo.add_worklog_safely(issue_id=jira_tickets[0], worklog_date=weekdays[0])}")
+        logger.info(
+            f"adding tempo worklog: {tempo.add_worklog_safely(issue_id=jira_tickets[0], worklog_date=weekdays[1])}")
+        logger.info(
+            f"adding tempo worklog: {tempo.add_worklog_safely(issue_id=jira_tickets[0], worklog_date=weekdays[2])}")
+        logger.info(
+            f"adding tempo worklog: {tempo.add_worklog_safely(issue_id=jira_tickets[1], worklog_date=weekdays[3])}")
+        logger.info(
+            f"adding tempo worklog: {tempo.add_worklog_safely(issue_id=jira_tickets[1], worklog_date=weekdays[4])}")
     else:
         logger.warning(f"wrong number of week day for {weekdays}")
+
 
 if __name__ == "__main__":
     run()

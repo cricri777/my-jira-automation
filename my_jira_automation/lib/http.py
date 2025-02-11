@@ -7,6 +7,7 @@ from lib import log
 
 logger = log.get_logger(__name__)
 
+
 def get_request(url: str, username, password) -> dict:
     """
     :param url: URL to which the GET request is sent.
@@ -44,7 +45,7 @@ def post_request(url: str, username: str, password: str, body: dict) -> dict:
         return response.json()
 
 
-def post_request_bearer(url:str, bearer_token:str, data: dict) -> dict:
+def post_request_bearer(url: str, bearer_token: str, data: dict) -> dict:
     """
     :param url: The URL to which the POST request is to be sent.
     :param bearer_token: The Bearer token used for authorization.
@@ -64,7 +65,8 @@ def post_request_bearer(url:str, bearer_token:str, data: dict) -> dict:
         logger.warning(f"post request bearer: status={response.status_code}, response={response.json()}")
     return response.json()
 
-def get_request_bearer(url:str, bearer_token:str, params:dict) -> dict:
+
+def get_request_bearer(url: str, bearer_token: str, params: dict) -> dict:
     """
     :param url: The endpoint URL to which the GET request is sent.
     :param bearer_token: The Bearer token used for authorization.
@@ -77,11 +79,16 @@ def get_request_bearer(url:str, bearer_token:str, params:dict) -> dict:
         "Content-Type": "application/json",
         "Authorization": f"Bearer {bearer_token}"
     }
-    response = requests.get(url, headers=headers, params=params)
-    if 300 > response.status_code >= 200:
-        logger.debug(f"Response : {response.json()}")
-    else:
-        logger.warning(f"get request with bearer: status={response.status_code}, response={response.json()}")
+    try:
+        response = requests.get(url, headers=headers, params=params)
+        if 300 > response.status_code >= 200:
+            logger.debug(f"Response : {response.json()}")
+        else:
+            logger.debug(f"response=[{response}]")
+            logger.warning(f"get request with bearer: status={response.status_code}, response={response.json()}")
+    except Exception as e:
+        logger.error(f"Error in decoding JSON response: {str(e)}")
+        return {}
     return response.json()
 
 

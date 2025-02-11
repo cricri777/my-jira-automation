@@ -35,11 +35,14 @@ pip install -r requirements-dev.txt
 ## Deploy on AWS lambda
 ### Packaging
 ```shell
+rm -rf package/
 mkdir package
 pip install -r requirements.txt -t package/
 cp -r my_jira_automation/* package/
 cd package
 zip -r ../lambda_function.zip .
+cd ..
+rm -rf package/
 ```
 
 ##### Upload Code

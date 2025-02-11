@@ -1,6 +1,7 @@
 import logging
 
-def get_logger(name, log_level: int=logging.DEBUG):
+
+def get_logger(name, log_level: int = logging.DEBUG):
     """
     :param log_level
     :param name: The name of the logger to be created.
@@ -8,6 +9,7 @@ def get_logger(name, log_level: int=logging.DEBUG):
     """
     logger = logging.getLogger(name)
     logger.setLevel(log_level)
+    logger.propagate = False
 
     ch = logging.StreamHandler()
     ch.setLevel(log_level)
@@ -19,7 +21,6 @@ def get_logger(name, log_level: int=logging.DEBUG):
 
 
 class CustomFormatter(logging.Formatter):
-
     grey = "\x1b[38;20m"
     yellow = "\x1b[33;20m"
     red = "\x1b[31;20m"
