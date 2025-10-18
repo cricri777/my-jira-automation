@@ -60,7 +60,7 @@ python main.py
 - ~~Use Tempo API to log time on ticket created~~
 - ~~Create JIRA ticket~~
 - ~~Create Tempo for the current week~~
-- Add Skipping holiday
+~~- Add Skipping holiday~~
 - Aws secretmanager integration
 - ~~Add more comments docstring~~
 - ~~Schedule it with aws (eventbridge lambda)~~

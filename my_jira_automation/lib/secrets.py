@@ -9,13 +9,17 @@ from lib.log import get_logger
 
 logger = get_logger(__name__)
 
+
 class Secrets:
     """get secrets for API jira, tempo, openai from secretmanager or default environment variable"""
+
     def __init__(self, is_secret_manager: bool):
         if is_secret_manager:
             logger.info("fetching configuration from awssecrets")
             session = boto3.session.Session()
-            client: SecretsManagerClient = session.client(service_name="secretsmanager", region_name="ca-central-1")
+            client: SecretsManagerClient = session.client(
+                service_name="secretsmanager", region_name="ca-central-1"
+            )
             response = client.get_secret_value(SecretId="my-jira-automation")
             secret = json.loads(response["SecretString"])
             self._jira_api_token = base64.b64decode(secret.get("JIRA_API_TOKEN")).decode("utf-8")

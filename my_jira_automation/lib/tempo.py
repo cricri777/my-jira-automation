@@ -3,13 +3,12 @@ from lib.http import post_request_bearer, get_request_bearer
 
 logger = log.get_logger(__name__)
 
+
 class Tempo:
 
-    def __init__(self,
-                 tempo_api_key,
-                 project_account_id,
-                 tempo_base_url="https://api.tempo.io/4/worklogs"
-                 ):
+    def __init__(
+        self, tempo_api_key, project_account_id, tempo_base_url="https://api.tempo.io/4/worklogs"
+    ):
         self.tempo_api_key = tempo_api_key
         self.project_account_id = project_account_id
         self.tempo_base_url = tempo_base_url
@@ -21,32 +20,37 @@ class Tempo:
         :param weekdays:
         :return:
         """
-        assert len(weekdays) == 5, "weekdays should be 5"
         request_worklog_params = {
             "authorAccountId": self.project_account_id,
             "from": weekdays[0],
-            "to": weekdays[-1]
+            "to": weekdays[-1],
         }
-        worklogs_to_validate = get_request_bearer(url=self.tempo_base_url,
-                                                  bearer_token=self.tempo_api_key,
-                                                  params=request_worklog_params)
+        worklogs_to_validate = get_request_bearer(
+            url=self.tempo_base_url, bearer_token=self.tempo_api_key, params=request_worklog_params
+        )
         total_work_time_of_current_week = 0
         for worklog in worklogs_to_validate["results"]:
             total_work_time_of_current_week += worklog.get("timeSpentSeconds", 0)
 
         if total_work_time_of_current_week > 108000:
-            logger.info(f"more than 30 hours logged this week, ({total_work_time_of_current_week} seconds)")
+            logger.info(
+                f"more than 30 hours logged this week, ({total_work_time_of_current_week} seconds)"
+            )
             return True
         else:
-            logger.info(f"less than 30 hours logged this week, ({total_work_time_of_current_week} seconds)")
+            logger.info(
+                f"less than 30 hours logged this week, ({total_work_time_of_current_week} seconds)"
+            )
             return False
 
-    def add_worklog_safely(self,
-                           issue_id: str,
-                           worklog_date: str,
-                           time_spent_seconds: int = 27000,
-                           description: str = "",
-                           start_time: str = "09:00:00"):
+    def add_worklog_safely(
+        self,
+        issue_id: str,
+        worklog_date: str,
+        time_spent_seconds: int = 27000,
+        description: str = "",
+        start_time: str = "09:00:00",
+    ):
         """if some worklog(s) already exists to the worklog_date we do nothing, else add_worklog
         :param issue_id:
         :param worklog_date:
@@ -58,29 +62,34 @@ class Tempo:
         request_worklog_params = {
             "authorAccountId": self.project_account_id,
             "from": worklog_date,
-            "to": worklog_date
+            "to": worklog_date,
         }
-        worklogs_to_validate = get_request_bearer(url=self.tempo_base_url,
-                                                  bearer_token=self.tempo_api_key,
-                                                  params=request_worklog_params)
+        worklogs_to_validate = get_request_bearer(
+            url=self.tempo_base_url, bearer_token=self.tempo_api_key, params=request_worklog_params
+        )
         logger.debug(f"check entried hours in {worklogs_to_validate['results']}")
         if len(worklogs_to_validate["results"]) > 0:
-            logger.info(f"Found some worklog(s) in Tempo at the date={worklog_date} so we don't add anything")
+            logger.info(
+                f"Found some worklog(s) in Tempo at the date={worklog_date} so we don't add anything"
+            )
             return None
         else:
-            return self.add_worklog(issue_id=issue_id,
-                                    worklog_date=worklog_date,
-                                    time_spent_seconds=time_spent_seconds,
-                                    description=description,
-                                    start_time=start_time)
+            return self.add_worklog(
+                issue_id=issue_id,
+                worklog_date=worklog_date,
+                time_spent_seconds=time_spent_seconds,
+                description=description,
+                start_time=start_time,
+            )
 
-
-    def add_worklog(self,
-                    issue_id: str,
-                    worklog_date: str,
-                    time_spent_seconds: int = 27000,
-                    description: str = "",
-                    start_time: str = "09:00:00"):
+    def add_worklog(
+        self,
+        issue_id: str,
+        worklog_date: str,
+        time_spent_seconds: int = 27000,
+        description: str = "",
+        start_time: str = "09:00:00",
+    ):
         """
         :param issue_id: Key of the Jira issue to which the worklog is to be added.
         :param worklog_date: Date for the worklog entry in YYYY-MM-DD format.
@@ -95,7 +104,9 @@ class Tempo:
             "timeSpentSeconds": time_spent_seconds,
             "startDate": worklog_date,
             "startTime": start_time,
-            "description": description
+            "description": description,
         }
         logger.debug(f"add tempo workload with payload={payload}")
-        return post_request_bearer(url=self.tempo_base_url,bearer_token=self.tempo_api_key, data=payload)
+        return post_request_bearer(
+            url=self.tempo_base_url, bearer_token=self.tempo_api_key, data=payload
+        )

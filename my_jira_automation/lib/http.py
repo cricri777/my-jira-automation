@@ -54,15 +54,14 @@ def post_request_bearer(url: str, bearer_token: str, data: dict) -> dict:
     """
     url_validate(url)
     logger.debug(f"POST request with bearer {url}")
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {bearer_token}"
-    }
+    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {bearer_token}"}
     response = requests.post(url, headers=headers, json=data)
     if 300 > response.status_code >= 200:
         logger.debug(f"Response : {response.json()}")
     else:
-        logger.warning(f"post request bearer: status={response.status_code}, response={response.json()}")
+        logger.warning(
+            f"post request bearer: status={response.status_code}, response={response.json()}"
+        )
     return response.json()
 
 
@@ -75,17 +74,16 @@ def get_request_bearer(url: str, bearer_token: str, params: dict) -> dict:
     """
     url_validate(url)
     logger.debug(f"GET request with bearer {url}, params=[{params}]")
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {bearer_token}"
-    }
+    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {bearer_token}"}
     try:
         response = requests.get(url, headers=headers, params=params)
         if 300 > response.status_code >= 200:
             logger.debug(f"Response : {response.json()}")
         else:
             logger.debug(f"response=[{response}]")
-            logger.warning(f"get request with bearer: status={response.status_code}, response={response.json()}")
+            logger.warning(
+                f"get request with bearer: status={response.status_code}, response={response.json()}"
+            )
     except Exception as e:
         logger.error(f"Error in decoding JSON response: {str(e)}")
         return {}
