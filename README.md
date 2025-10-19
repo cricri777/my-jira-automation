@@ -41,6 +41,8 @@ pip install -r requirements.txt -t package/
 cp -r my_jira_automation/* package/
 cd package
 zip -r ../lambda_function.zip .
+cd ..
+rm -rf package/
 ```
 
 ##### Upload Code
